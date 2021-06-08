@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.1.0/redux.min.js" integrity="sha512-F21iSaHGX/3NFz5SuwoH6pGhTPxtoJoWWULqQVPQPtLm7nbK5r8vRSSSYy3Aj+H39cVrVm4+3ikGoVD1AjE0sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </head>
+    <body>
+        <style>
+            .container{
+                border:5px solid black;
+                padding:10px;
+            }
+        </style>
+        <div id='red'></div>
+        <div id='green'></div>
+        <div id='blue'></div>
+        
+    </body>
+
+</html>
+<!--     JS        -->
+<script>
+    function reducer(state, action){
+        var newState = state === undefined ? { color : 'white'}
+                                           : Object.assign({}, state);
+        const {type : _type, color : _color} = action;
+        switch ( _type ) {
+            case 'CHANGE_COLOR' :
+                newState.color = _color;
+                break;
+            default : 
+                console.log('_type : ', _type);
+        }
+        console.log('in reducer, : after state : ', newState, '\naction : ', action, '\nbefore state : ', state);
+        return newState;
+    }
+    var store = Redux.createStore(reducer, 
+                                  window.__REDUX_DEVTOOLS_EXTENSION__ &&
+                                  window.__REDUX_DEVTOOLS_EXTENSION__()
+                                  );            
+    store.subscribe(red);
+    store.subscribe(blue);
+    store.subscribe(green);    
+    //document.querySelector('#component_red').style.backgroundColor = 'red';
+
+    function red(){
+        const state = store.getState();
+        Object.freeze(state);
+        
+        document.querySelector('#red').innerHTML =`
+            <div class='container' id='component_red' style='background-color:${state.color}'>
+                <h1>red</h1>
+                <input type='button' value='fire'
+                    onClick ="
+                        store.dispatch({type:'CHANGE_COLOR', color:'red'}) ;
+                    ">
+            </div>
+        `;
+    }
+    function blue(){
+        const state = store.getState();
+        Object.freeze(state);
+        
+        document.querySelector('#blue').innerHTML =`
+            <div class='container' id='component_blue' style='background-color:${state.color}'>
+                <h1>blue</h1>
+                <input type='button' value='fire'
+                    onClick ="
+                        store.dispatch({type:'CHANGE_COLOR', color:'blue'}) ;
+                        
+                    ">
+            </div>
+        `;
+    }
+    function green(){  
+        const state = store.getState();
+        Object.freeze(state);
+        
+        document.querySelector('#green').innerHTML =`
+            <div class='container' id='component_green' style='background-color:${state.color}'>
+                <h1>green</h1>
+                <input type='button' value='fire'
+                    onClick ="
+                        store.dispatch({type:'CHANGE_COLOR', color:'green'}) ;
+                        
+                    ">
+            </div>
+        `;
+    }
+    
+ 
+
+    
+    red();
+    blue();
+    green();
+    
+    
+</script>
